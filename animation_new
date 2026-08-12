@@ -1,0 +1,80 @@
+import pygame
+import random
+
+pygame.init()
+
+screen = pygame.display.set_mode((1600,800))
+background = pygame.image.load("images/images-2.jpeg")
+background = pygame.transform.scale(background, (1600,800))
+
+flower = pygame.image.load("images/flower.png")
+flower = pygame.transform.scale(flower, (100,100))
+
+
+y_f =-100
+y_f2 = 800
+x_f = -100
+x_f2 = 1600
+
+particles = []
+
+
+
+for i in range(150):
+    particles.append([random.randint(0, 1600),random.randint(0, 800),random.uniform(-1, 1),random.uniform(-1, 1),random.randint(1, 4)])
+
+
+def draw_particles():
+    for p in particles:
+
+        p[0] += p[2]
+        p[1] += p[3]
+
+
+        if p[0] < 0:
+            p[0] = 1600
+        if p[0] > 1600:
+            p[0] = 0
+
+        if p[1] < 0:
+            p[1] = 800
+        if p[1] > 800:
+            p[1] = 0
+
+        pygame.draw.circle(screen,(255, 255, 255),(int(p[0]), int(p[1])),p[4])
+
+def animation ():
+    global y_f, y_f2, x_f, x_f2
+    for i in range(16):
+        screen.blit(flower, (0 + i * 100, y_f))
+    y_f += 2
+    for i in range(16):
+        screen.blit(flower, (0 + i * 100, y_f2))
+    y_f2 -= 2
+    for i in range(8):
+        screen.blit(flower, (x_f, 0 + i * 100))
+    x_f += 4
+    for i in range(8):
+        screen.blit(flower, (x_f2, 0 + i * 100))
+    x_f2 -=4
+
+
+
+
+while True:
+    screen.blit(background, (0, 0))
+    screen.fill("pink")
+
+    animation()
+    if x_f >= 1600:
+        y_f = -100
+        y_f2 = 800
+        x_f = -100
+        x_f2 = 1600
+
+    draw_particles()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    pygame.display.update()
